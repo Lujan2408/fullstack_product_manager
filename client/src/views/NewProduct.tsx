@@ -1,6 +1,7 @@
 import { Link, Form, useActionData } from "react-router-dom"
 import type { ActionFunctionArgs } from "react-router-dom"
 import ErrorMessage from "../components/ErrorMessage";
+import { addProduct } from "../services/ProductService";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function action({ request } : ActionFunctionArgs) {
@@ -13,6 +14,8 @@ export async function action({ request } : ActionFunctionArgs) {
   if (error.length) {
     return error
   }
+
+  await addProduct(data)
 
   return {}
 }
