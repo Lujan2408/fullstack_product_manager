@@ -1,15 +1,26 @@
-import { Link, Form } from "react-router-dom";
+import { Link, Form, useActionData } from "react-router-dom";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function action() {
-  console.log("Creando un nuevo producto");
+export async function action({ request }) {
+  const data = Object.fromEntries(await request.formData());
 
-  return {
-    message: "Producto creado correctamente",
+  let error = ''
+  if (Object.values(data).includes('')) {
+    error = 'All fields are required'
   }
+  if (error.length) {
+    return error
+  }
+
+  return {}
 }
 
 export default function NewProduct() {
+  
+  const error = useActionData()
+
+  console.log(error)
+ 
   return (
     <>
       <div className="flex justify-between">
