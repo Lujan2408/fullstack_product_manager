@@ -1,14 +1,22 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Link, Form, useActionData, redirect } from "react-router-dom"
+import { Link, Form, useActionData, redirect, useLoaderData } from "react-router-dom"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router-dom"
 import ErrorMessage from "../components/ErrorMessage";
-import { addProduct } from "../services/ProductService";
+import { addProduct, getProductById } from "../services/ProductService";
+import type { Product } from "../types";
 
 export async function loader({params} : LoaderFunctionArgs) {
   const { id } = params
-  console.log(id)
+  
+  if (id !== undefined) {
+    const product = await getProductById(+id)
+  
+    if (!product) {
+      return redirect('/')
+    }
 
-  return null
+    return { product }
+  }
 } 
 
 export async function action({ request } : ActionFunctionArgs) {
@@ -28,7 +36,8 @@ export async function action({ request } : ActionFunctionArgs) {
 }
 
 export default function EditProduct() {
-  
+
+  const { product } = useLoaderData() as { product: Product }
   const error = useActionData() as string
  
   return (
@@ -59,6 +68,7 @@ export default function EditProduct() {
             className="mt-2 block w-full p-3 bg-gray-50"
             placeholder="Product Name"
             name="name"
+            defaultValue={product.name}
           />
         </div>
         <div className="mb-4">
@@ -71,6 +81,7 @@ export default function EditProduct() {
             className="mt-2 block w-full p-3 bg-gray-50"
             placeholder="Product Price. ej. 200, 300"
             name="price"
+            defaultValue={product.price}
           />
         </div>
         <input
