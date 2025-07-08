@@ -1,9 +1,16 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Link, Form, useActionData, redirect } from "react-router-dom"
-import type { ActionFunctionArgs } from "react-router-dom"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router-dom"
 import ErrorMessage from "../components/ErrorMessage";
 import { addProduct } from "../services/ProductService";
 
-// eslint-disable-next-line react-refresh/only-export-components
+export async function loader({params} : LoaderFunctionArgs) {
+  const { id } = params
+  console.log(id)
+
+  return null
+} 
+
 export async function action({ request } : ActionFunctionArgs) {
   const data = Object.fromEntries(await request.formData());
 
