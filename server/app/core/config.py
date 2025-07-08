@@ -22,5 +22,14 @@ class Settings(BaseSettings):
 
     model_config = ConfigDict(env_file=".env")
 
+    # Cors config 
+    CORS_ORIGINS: list[str]
+    CORS_ALLOW_CREDENTIALS: bool = True
+    CORS_ALLOW_METHODS: list[str] = ["*"]
+    CORS_ALLOW_HEADERS: list[str] = ["*"]
+
+    model_config = ConfigDict(env_file=".env")
+
 
 settings = Settings()
+print("CORS_ORIGINS:", settings.CORS_ORIGINS)
