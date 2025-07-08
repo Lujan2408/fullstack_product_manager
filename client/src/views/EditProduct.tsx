@@ -2,7 +2,7 @@
 import { Link, Form, useActionData, redirect, useLoaderData } from "react-router-dom"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router-dom"
 import ErrorMessage from "../components/ErrorMessage";
-import { addProduct, getProductById } from "../services/ProductService";
+import { getProductById, updateProduct } from "../services/ProductService";
 import type { Product } from "../types";
 
 export async function loader({params} : LoaderFunctionArgs) {
@@ -19,20 +19,22 @@ export async function loader({params} : LoaderFunctionArgs) {
   }
 } 
 
-export async function action({ request } : ActionFunctionArgs) {
+export async function action({ request, params } : ActionFunctionArgs) {
+  
   const data = Object.fromEntries(await request.formData());
-
   let error = ''
+  
   if (Object.values(data).includes('')) {
     error = 'All fields are required'
   }
   if (error.length) {
     return error
   }
-
-  await addProduct(data)
-
-  return redirect('/')
+  
+  if(params.id !== undefined) {    
+    await updateProduct(+params.id, data)
+    return redirect('/')
+  }
 }
 
 export default function EditProduct() {
