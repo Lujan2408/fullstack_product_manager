@@ -20,14 +20,14 @@ export async function action({ request } : ActionFunctionArgs) {
   return redirect('/')
 }
 
-export default function NewProduct() {
+export default function EditProduct() {
   
   const error = useActionData() as string
  
   return (
     <>
       <div className="flex justify-between">
-        <h1 className="text-4xl font-black text-slate-500">Add New Product</h1>
+        <h1 className="text-4xl font-black text-slate-500">Edit Product</h1>
         <Link
           to="/"
           className="bg-indigo-600 text-white p-3 rounded-md font-medium shadow-sm hover:bg-indigo-500"
@@ -69,7 +69,7 @@ export default function NewProduct() {
         <input
           type="submit"
           className="mt-5 w-full bg-indigo-600 p-2 text-white font-bold text-lg cursor-pointer rounded"
-          value="Add Product"
+          value="Edit Product"
         />
       </Form>
     </>
