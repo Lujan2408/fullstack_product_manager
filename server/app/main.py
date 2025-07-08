@@ -5,8 +5,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.main import api_router
 from app.core.db import lifespan
 from app.core.config import settings
+from app.core.middleware.logging_middleware import LoggingMiddleware
+from app.core.logging import logger
 
 app = FastAPI(lifespan=lifespan)
+
+# Add logging middleware
+app.add_middleware(LoggingMiddleware)
 
 # Add cors middleware
 app.add_middleware(

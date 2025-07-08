@@ -11,12 +11,15 @@ from app.schemas.product import ProductCreate, ProductUpdate
 from app.errors.product_errors import ProductNotFoundError, DuplicateProductNameError, NoFieldsToUpdateError
 from sqlmodel import select
 from app.helpers.format_date import now_without_microseconds
+from app.core.logging import logger
+import colorama
 
 class ProductService:
     def __init__(self, session: AsyncSessionDependency):
         self.session = session
 
     async def create_product(self, product_data: ProductCreate):
+        logger.info(f"Creating product: {colorama.Fore.YELLOW}{product_data.name}{colorama.Style.RESET_ALL}")
 
         # Check if a product already exists with the same name
         existing_product = await self.session.execute(select(Product).where(Product.name == product_data.name))
@@ -30,13 +33,18 @@ class ProductService:
         await self.session.commit()
         await self.session.refresh(product)
 
+        logger.info(f"Product created successfully: {colorama.Fore.GREEN}{product.name}✅{colorama.Style.RESET_ALL}")
         return product
     
     async def get_all_products(self):
+        logger.info(f"Getting all products: {colorama.Fore.YELLOW}🔍{colorama.Style.RESET_ALL}")
+
         result = await self.session.execute(select(Product))
         return result.scalars().all()
     
     async def get_product_by_id(self, product_id: int):
+        logger.info(f"Getting product by id: {colorama.Fore.YELLOW}{product_id} {colorama.Fore.GREEN}🔍{colorama.Style.RESET_ALL}")
+
         product_db = await self.session.get(Product, product_id)
 
         if not product_db: 
@@ -45,6 +53,8 @@ class ProductService:
         return product_db
     
     async def update_product(self, product_id: int, product_data: ProductUpdate):
+        logger.info(f"Updating product: {colorama.Fore.YELLOW}{product_id} {colorama.Fore.GREEN}🖋️{colorama.Style.RESET_ALL}")
+
         product_db = await self.session.get(Product, product_id)
 
         # Check if the product exists
@@ -89,6 +99,8 @@ class ProductService:
         return product_db
     
     async def delete_product(self, product_id: int):
+        logger.info(f"Deleting product: {colorama.Fore.YELLOW}{product_id} {colorama.Fore.RED}🗑️{colorama.Style.RESET_ALL}")
+
         product_db = await self.session.get(Product, product_id)
 
         if not product_db:
