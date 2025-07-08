@@ -1,6 +1,7 @@
-import { safeParse } from "valibot";
+import { safeParse, pipe, transform, string, number, parse } from "valibot";
 import axios from "axios";
-import { DraftProductSchema, ProductSchema, ProductsSchema, type Product } from "../types";
+import { DraftProductSchema, ProductSchema, ProductsSchema, UpdateProductSchema, type Product } from "../types";
+import { toBoolean } from "../utils";
 
 type ProductData = {
   [k: string]: FormDataEntryValue
@@ -59,6 +60,20 @@ export async function getProductById(id: Product['id']) {
 }
 
 export async function updateProduct(id: Product['id'], data: ProductData) {
-    console.log(id)
-    console.log(data)
+    try {
+      const NumberSchema = pipe(string(), transform(Number), number())
+
+      const result = safeParse(UpdateProductSchema, {
+        id, 
+        name: data.name,
+        price: parse(NumberSchema, data.price),
+        available: data.available ? toBoolean(data.available.toString()) : false
+      })
+
+      if(result.success) {
+        
+      }
+    } catch (error) {
+      console.log(error)
+    }
 }

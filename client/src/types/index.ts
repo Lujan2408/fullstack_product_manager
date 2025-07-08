@@ -14,6 +14,13 @@ export const ProductSchema = object({
   updated_at: string(),
 })
 
+export const UpdateProductSchema = object({
+  id: number(),
+  name: string(),
+  price: number(),
+  available: boolean(),
+})
+
 export const ProductsSchema = array(ProductSchema)
 
 export type Product = InferOutput<typeof ProductSchema>
