@@ -1,7 +1,6 @@
 import { safeParse, pipe, transform, string, number, parse } from "valibot";
 import axios from "axios";
 import { DraftProductSchema, ProductSchema, ProductsSchema, UpdateProductSchema, type Product } from "../types";
-import { toBoolean } from "../utils";
 
 type ProductData = {
   [k: string]: FormDataEntryValue
@@ -62,16 +61,20 @@ export async function getProductById(id: Product['id']) {
 export async function updateProduct(id: Product['id'], data: ProductData) {
     try {
       const NumberSchema = pipe(string(), transform(Number), number())
+      const isAvailable = data.availability === "on" || data.availability === "true"
 
       const result = safeParse(UpdateProductSchema, {
         id, 
         name: data.name,
         price: parse(NumberSchema, data.price),
-        available: data.available ? toBoolean(data.available.toString()) : false
+        available: isAvailable
       })
 
       if(result.success) {
-        
+        const url = `${import.meta.env.VITE_API_URL}/api/v1/products/${id}`
+        await axios.patch(url, result.output)
+      } else {
+        throw new Error("Error al actualizar el producto", { cause: result.issues })
       }
     } catch (error) {
       console.log(error)
