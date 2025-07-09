@@ -1,5 +1,5 @@
-import { Link, useLoaderData } from "react-router-dom";
-import { getProducts } from "../services/ProductService";
+import { Link, useLoaderData, type ActionFunctionArgs } from "react-router-dom";
+import { getProducts, updateAvailability } from "../services/ProductService";
 import ProductDetails from "../components/ProductDetails";
 import { type Product } from "../types";
 
@@ -7,6 +7,14 @@ import { type Product } from "../types";
 export async function loader() {
   const products = await getProducts()
   return products
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = Object.fromEntries(await request.formData())
+  await updateAvailability(+formData.id)
+
+  return {}
 }
 
 export default function Products() {

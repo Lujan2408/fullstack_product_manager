@@ -67,6 +67,18 @@ async def update_product_handler(product_id: int, product_data: ProductUpdate, s
     raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
   except Exception as e:
     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unexpected error ocurred")
+
+async def update_availability_handler(product_id: int, session: AsyncSessionDependency):
+  try: 
+    service = ProductService(session)
+    product = await service.update_availability(product_id)
+
+    return ProductResponse.model_validate(product).model_dump()
+  
+  except ProductNotFoundError as e:
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+  except Exception as e:
+    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Unexpected error ocurred")
   
 async def delete_product_handler(product_id: int, session: AsyncSessionDependency):
   try: 

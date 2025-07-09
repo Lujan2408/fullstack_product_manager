@@ -110,3 +110,24 @@ class ProductService:
         await self.session.commit()
 
         return product_db
+
+    async def update_availability(self, product_id: int):
+        logger.info(f"Updating availability for product: {colorama.Fore.YELLOW}{product_id} {colorama.Fore.GREEN}🔄{colorama.Style.RESET_ALL}")
+
+        product_db = await self.session.get(Product, product_id)
+
+        if not product_db:
+            raise ProductNotFoundError("Product not found or does not exist")
+        
+        # Toggle the availability
+        product_db.available = not product_db.available
+        
+        # Update the timestamp
+        product_db.updated_at = now_without_microseconds()
+        
+        self.session.add(product_db)
+        await self.session.commit()
+        await self.session.refresh(product_db)
+
+        logger.info(f"Product availability updated: {colorama.Fore.GREEN}{product_db.name} - {'Available' if product_db.available else 'Unavailable'}✅{colorama.Style.RESET_ALL}")
+        return product_db
