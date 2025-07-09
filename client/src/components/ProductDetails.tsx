@@ -12,6 +12,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
   
   return (
     <tr className="border-b border-slate-300 font-medium">
+      <td className="p-3 text-lg text-gray-800">{product.id}</td>
       <td className="p-3 text-lg text-gray-800">{product.name}</td>
       <td className="p-3 text-lg text-gray-800">{formatCurrency(product.price)}</td>
       <td className="p-3 text-lg text-gray-800">{product.available ? 'Available' : 'Unavailable'}</td>

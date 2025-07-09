@@ -39,7 +39,7 @@ class ProductService:
     async def get_all_products(self):
         logger.info(f"Getting all products: {colorama.Fore.YELLOW}🔍{colorama.Style.RESET_ALL}")
 
-        result = await self.session.execute(select(Product))
+        result = await self.session.execute(select(Product).order_by(Product.id.asc()))
         return result.scalars().all()
     
     async def get_product_by_id(self, product_id: int):
