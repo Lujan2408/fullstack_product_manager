@@ -2,7 +2,7 @@
 # Latest stable versions as of June 2025
 
 # Core Framework
-fastapi==0.115.13
+fastapi[standard]==0.115.13
 uvicorn==0.34.3
 starlette==0.46.2
 
