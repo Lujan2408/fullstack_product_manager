@@ -18,7 +18,7 @@ class Settings(BaseSettings):
 
     @property
     def SQLALCHEMY_ASYNC_DATABASE_URI(self) -> str: 
-        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}?ssl=require"
 
     # Cors config 
     CORS_ORIGINS: list[str]
